@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Flipbook con Índice en Imagen 2</title>
+  <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.min.js"></script>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/css/page-flip.css">
+  <style>
+    html, body {margin:0; padding:0; width:100%; height:100%; background:#333; display:flex; justify-content:center; align-items:center;}
+    .flipbook-wrapper {position:relative; width:908px; height:1298px;}
+    #flipbook {width:100%; height:100%;}
+    .boton-indice {position:absolute; bottom:20px; left:50%; transform:translateX(-50%); padding:10px 20px; background:rgba(0,0,0,0.6); color:white; border:none; border-radius:10px; cursor:pointer; font-size:16px; z-index:10;}
+    .boton-indice:hover {background:rgba(0,0,0,0.8);}
+    .indice-overlay {position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; display:none;}
+    .indice-overlay button {position:absolute; background:rgba(255,255,255,0.05); border:none; cursor:pointer; pointer-events:auto;}
+    .indice-overlay button:hover {background:rgba(255,255,255,0.2);}
+    #contadorVisitas {position:absolute; bottom:20px; right:20px; background:rgba(0,0,0,0.6); color:white; padding:5px 10px; border-radius:8px; font-family:sans-serif; font-size:14px; z-index:15; display:none;}
+  </style>
+</head>
+<body>
+  <div class="flipbook-wrapper">
+    <div id="flipbook"></div>
+
+    <button class="boton-indice" onclick="irAPagina(2)">📖 Ir al índice</button>
+
+    <div class="indice-overlay" id="indiceOverlay">
+      <button style="top:270px; left:100px; width:300px; height:20px;" onclick="irAPagina(3)"></button>
+      <button style="top:310px; left:100px; width:300px; height:20px;" onclick="irAPagina(4)"></button>
+	  <button style="top:350px; left:100px; width:300px; height:20px;" onclick="irAPagina(5)"></button>
+	  <button style="top:390px; left:100px; width:300px; height:20px;" onclick="irAPagina(6)"></button>
+	  <button style="top:430px; left:100px; width:300px; height:20px;" onclick="irAPagina(7)"></button>
+	  <button style="top:470px; left:100px; width:300px; height:20px;" onclick="irAPagina(7)"></button>
+	  <button style="top:510px; left:100px; width:300px; height:20px;" onclick="irAPagina(8)"></button>	  
+	  <button style="top:550px; left:100px; width:300px; height:20px;" onclick="irAPagina(8)"></button>
+	  <button style="top:590px; left:100px; width:300px; height:20px;" onclick="irAPagina(10)"></button>
+	  <button style="top:630px; left:100px; width:300px; height:20px;" onclick="irAPagina(10)"></button>
+	  <button style="top:670px; left:100px; width:300px; height:20px;" onclick="irAPagina(11)"></button>
+	  <button style="top:710px; left:100px; width:300px; height:20px;" onclick="irAPagina(12)"></button>
+	  <button style="top:750px; left:100px; width:300px; height:20px;" onclick="irAPagina(12)"></button>
+	  <button style="top:790px; left:100px; width:300px; height:20px;" onclick="irAPagina(14)"></button>
+	  <button style="top:830px; left:100px; width:300px; height:20px;" onclick="irAPagina(13)"></button>
+	  <button style="top:870px; left:100px; width:300px; height:20px;" onclick="irAPagina(15)"></button>
+	  <button style="top:910px; left:100px; width:300px; height:20px;" onclick="irAPagina(15)"></button>
+	  <button style="top:950px; left:100px; width:300px; height:20px;" onclick="irAPagina(16)"></button>
+	  <button style="top:990px; left:100px; width:300px; height:20px;" onclick="irAPagina(17)"></button>
+	  <button style="top:1030px; left:100px; width:300px; height:20px;" onclick="irAPagina(18)"></button>
+	  <button style="top:1070px; left:100px; width:300px; height:20px;" onclick="irAPagina(19)"></button>
+	  <button style="top:1110px; left:100px; width:300px; height:20px;" onclick="irAPagina(20)"></button>
+	  <button style="top:1150px; left:100px; width:300px; height:20px;" onclick="irAPagina(20)"></button>
+	  <button style="top:1190px; left:100px; width:300px; height:20px;" onclick="irAPagina(21)"></button>
+	  
+	  <button style="top:350px; left:550px; width:300px; height:20px;" onclick="irAPagina(21)"></button>
+	  <button style="top:390px; left:550px; width:300px; height:20px;" onclick="irAPagina(22)"></button>
+	  <button style="top:430px; left:550px; width:300px; height:20px;" onclick="irAPagina(23)"></button>
+	  <button style="top:470px; left:550px; width:300px; height:20px;" onclick="irAPagina(24)"></button>
+	  <button style="top:510px; left:550px; width:300px; height:20px;" onclick="irAPagina(24)"></button>
+	  <button style="top:550px; left:550px; width:300px; height:20px;" onclick="irAPagina(25)"></button>
+	  <button style="top:590px; left:550px; width:300px; height:20px;" onclick="irAPagina(26)"></button>
+	  <button style="top:630px; left:550px; width:300px; height:20px;" onclick="irAPagina(26)"></button>
+	  <button style="top:770px; left:550px; width:300px; height:20px;" onclick="irAPagina(9)"></button>
+    </div>
+
+    <div id="contadorVisitas">👁️ Cargando visitas...</div>
+  </div>
+
+  <script>
+    const flip = new St.PageFlip(document.getElementById("flipbook"), {
+      width: 908, height: 1298, size:"stretch", autoCenter:true,
+      showCover:false, usePortrait:true, minWidth:908, maxWidth:908, minHeight:400, maxHeight:1298
+    });
+
+    const paginas = [
+      "img/1.jpg","img/2.jpg","img/3.jpg","img/4.jpg","img/5.jpg",
+      "img/6.jpg","img/7.jpg","img/8.jpg","img/9.jpg","img/10.jpg",
+      "img/11.jpg","img/12.jpg","img/13.jpg","img/14.jpg","img/15.jpg",
+      "img/16.jpg","img/17.jpg","img/18.jpg","img/19.jpg","img/20.jpg",
+      "img/21.jpg","img/22.jpg","img/23.jpg","img/24.jpg","img/25.jpg",
+      "img/26.jpg","img/27.jpg","img/28.jpg"
+    ];
+
+    flip.loadFromImages(paginas);
+
+    const contadorElemento = document.getElementById("contadorVisitas");
+
+    function irAPagina(num){ flip.turnToPage(num-1); }
+
+    // ---------------- Firebase ----------------
+    const firebaseConfig = {
+      apiKey: "TU_API_KEY",
+      authDomain: "TU_PROYECTO.firebaseapp.com",
+      projectId: "TU_PROYECTO",
+      storageBucket: "TU_PROYECTO.appspot.com",
+      messagingSenderId: "TU_SENDER_ID",
+      appId: "TU_APP_ID"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const docRef = db.collection("contador").doc("visitas");
+
+    async function incrementarContadorGlobal() {
+      try {
+        await db.runTransaction(async (t) => {
+          const doc = await t.get(docRef);
+          let count = doc.exists ? doc.data().count : 0;
+          t.set(docRef, {count: count + 1});
+          contadorElemento.innerText = "👁️ Visitas globales: " + (count + 1);
+        });
+        contadorElemento.style.display = "block";
+      } catch(e){
+        console.error("Error incrementando Firebase:", e);
+        contadorElemento.innerText = "👁️ Error contador";
+        contadorElemento.style.display = "block";
+      }
+    }
+
+    // Incrementar contador al cargar el flipbook
+    document.addEventListener("DOMContentLoaded", () => {
+      incrementarContadorGlobal();
+    });
+
+    // Mostrar contador solo en página 28
+    flip.on("flip", (e)=>{
+      document.getElementById("indiceOverlay").style.display = (e.data===1)? "block":"none";
+      contadorElemento.style.display = (e.data===27) ? "block" : "none";
+    });
+  </script>
+</body>
+</html>
